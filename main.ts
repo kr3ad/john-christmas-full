@@ -18,6 +18,13 @@ namespace SpriteKind {
     export const PLATE = SpriteKind.create()
     export const FOOD1 = SpriteKind.create()
     export const BADFOOD = SpriteKind.create()
+    export const GAME = SpriteKind.create()
+    export const AJR = SpriteKind.create()
+    export const BIGTEDDY = SpriteKind.create()
+    export const LILTEDDY = SpriteKind.create()
+    export const PRESENTS = SpriteKind.create()
+    export const THEPRESENT = SpriteKind.create()
+    export const MIRROR = SpriteKind.create()
 }
 function SpawnTextSprite (text: string, X: number, Y: number) {
     textSprite = textsprite.create(text)
@@ -72,6 +79,8 @@ function John_and_Kathleens_Room2 () {
 }
 sprites.onOverlap(SpriteKind.PLATE, SpriteKind.BADFOOD, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
+    music.setVolume(50)
+    music.play(music.melodyPlayable(music.buzzer), music.PlaybackMode.InBackground)
     info.changeScoreBy(-5)
 })
 function HALLWAY () {
@@ -79,75 +88,6 @@ function HALLWAY () {
     music.setVolume(20)
     tiles.setCurrentTilemap(tilemap`level1`)
     music.play(music.createSong(assets.song`Serenade for Strings`), music.PlaybackMode.LoopingInBackground)
-}
-function INCORRECT_ANIMATION () {
-    music.stopAllSounds()
-    scene.setBackgroundColor(15)
-    tiles.setCurrentTilemap(tilemap`level35`)
-    sprites.destroy(John)
-    color.startFade(color.Black, color.originalPalette, 500)
-    color.pauseUntilFadeDone()
-    music.play(music.createSong(hex`0090010408030100001c00010a006400f401640000040000000000000000000000000005000004900000000400012c04000800012a08000c0001290c001000012710001400012514001800012418001c0001221c002000012020002400011e24002800011d28002c00011b2c003000011930003400011834003800011638003c0001143c004000011240004400011144004800010f48004c00010d4c005000010c50005400010a54005800010858005c0001065c0060000105`), music.PlaybackMode.InBackground)
-    mySprite = sprites.create(img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f e e e e e e e e f f . . 
-        . . f e e 2 2 2 2 2 2 e e f . . 
-        . . f e 2 d d d d d d 2 e f . . 
-        . . f d d d e e e e d d d f . . 
-        . f f e f b f 4 4 f b f e f f . 
-        . f e e 4 1 f d d f 1 4 e e f . 
-        f f e e e d d d d d d e e e f f 
-        f e e f e e 4 e e 4 e e f e e f 
-        f e f f f 2 2 2 2 2 2 f f f e f 
-        f f 4 d f 2 2 2 2 2 2 f d 4 f f 
-        . f 4 4 f d d 5 5 d d f 4 4 f . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `, SpriteKind.Player)
-    mySprite.setPosition(scene.screenWidth(), scene.screenHeight() / 0)
-    mySprite.setVelocity(-100, 0)
-    pause(500)
-    DRAGON = sprites.create(img`
-        ................................
-        .............cc22...............
-        .............c2c2...............
-        ...........cc2ccc...............
-        ......cccccc22c...cc22..........
-        ......ccccc22cc...cc22..........
-        ...ccc66666666ccccc2cc..........
-        ..c66666666666666b2cc...........
-        ..c666666ff666666bccc...........
-        .c666666f666666666b...c22.......
-        c666666f226bb666666bbc2cc.......
-        c66bb6f22666666666666bc.........
-        c66bb6626666666666666bc.........
-        c666666666666666666666b.........
-        .c1bbb1bbb666667776666b..c2.....
-        .c1bbb1bbb666667776666b..cc.....
-        c16331bbbbb667777776667ccc......
-        .c6333bbbbb667777777777bbcc.....
-        .c6333bbbbb667777777777bbcc.....
-        .c63333bbb666777777777777ccccc..
-        .c63333bb66bbb666b7777777cccc7c.
-        .c63333666bbb6666b77777777b777c.
-        .c63333666bbb6666b77777777b777c.
-        ..c666666b66666bb7777777777777c.
-        ...ccccbbc666bb6667bb77777777cc.
-        ...ccccbbc666bb6667bb77777777cc.
-        ......cbbbccc66dddbbbb77777ccc..
-        .....cddddcccdddddbccbbbbcc.....
-        .....cddddcccdddddbccbbbbcc.....
-        .....ccccccdd6666ddcccccc.......
-        ..........ccccccccccc...........
-        ................................
-        `, SpriteKind.Player)
-    DRAGON.setPosition(scene.screenWidth(), scene.screenHeight() / 0)
-    DRAGON.setVelocity(-125, 0)
-    pause(2000)
-    game.showLongText("YOU GOT EATEN BY A DRAGON... BECAUSE THAT MAKES SENSE...", DialogLayout.Bottom)
-    game.gameOver(false)
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile94`, function (sprite, location) {
     if (controller.A.isPressed()) {
@@ -165,7 +105,46 @@ sprites.onOverlap(SpriteKind.MOM, SpriteKind.Player, function (sprite, otherSpri
         if (MOMINTERACTIONS == 2) {
             MOMSECONDINTERACTION()
         }
+        if (MOMINTERACTIONS >= 3) {
+            game.showLongText("I GOT A ROBE", DialogLayout.Bottom)
+        }
     }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.THEPRESENT, function (sprite, otherSprite) {
+    if (controller.A.isPressed()) {
+        game.showLongText("YOU OPENED THE PRESENT", DialogLayout.Bottom)
+        sprites.destroy(THEPRESENT, effects.warmRadial, 500)
+        MIRROR = sprites.create(img`
+            . . . e e e e e e e . . . 
+            . . e 9 9 1 9 9 9 9 e . . 
+            . e 9 9 1 9 9 9 9 9 1 e . 
+            e 9 9 1 9 9 9 9 9 1 9 9 e 
+            e 9 9 9 9 9 9 9 1 9 9 9 e 
+            e 9 9 9 9 9 9 9 9 9 9 9 e 
+            e 9 9 9 9 9 9 9 9 9 9 9 e 
+            e 9 9 1 9 9 9 9 9 9 9 9 e 
+            e 9 1 9 9 9 9 9 9 9 9 9 e 
+            e 1 9 9 9 9 9 9 9 1 9 9 e 
+            . e 9 9 9 9 9 9 1 9 9 e . 
+            . . e 9 9 9 9 1 9 9 e . . 
+            . . . e e f e e e e . . . 
+            . . e f . . . . . . . . . 
+            . e f . . . . . . . . . . 
+            e f . . . . . . . . . . . 
+            `, SpriteKind.MIRROR)
+        tiles.placeOnTile(MIRROR, tiles.getTileLocation(17, 1))
+        pause(500)
+        game.showLongText("IT'S A MIRROR, BECAUSE THE GREATEST GIFT THIS FAMILY HAS GOTTEN IS YOU!", DialogLayout.Bottom)
+        game.showLongText("MERRY CHRISTMAS JOHN! WE LOVE YOU!", DialogLayout.Bottom)
+        game.gameOver(true)
+    }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.PRESENTS, function (sprite, otherSprite) {
+    tiles.placeOnRandomTile(PRESENTS2, sprites.dungeon.floorDark0)
+    music.setVolume(50)
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+    info.changeScoreBy(1)
+    info.changeLifeBy(1)
 })
 function SARAHFIRSTINTERACTION () {
     game.showLongText("EEEEEKKKKKK!!! JOHN THANK GOODNESS YOU'RE HERE!", DialogLayout.Bottom)
@@ -335,8 +314,25 @@ function SARAHFIRSTINTERACTION () {
     Lizard_Spawn += 1
     Ladybug_Spawn += 1
 }
+function Guessing_Game () {
+    music.stopAllSounds()
+    tiles.setCurrentTilemap(tilemap`level32`)
+    tiles.placeOnTile(John, tiles.getTileLocation(5, 15))
+    color.startFade(color.Black, color.originalPalette, 500)
+    color.pauseUntilFadeDone()
+    music.setVolume(40)
+    music.play(music.createSong(hex`0082000408080106001c00010a006400f401640000040000000000000000000000000000000002c00000000800012208001000012710001800012218002000011b20002800012228003000012730004000012240004800012248005000012750005800012258006000012760006800012a6c007000012970007400012774007800012578007c0001247c008000012480008800012288009000012790009800012298009c00011e9c00a0000120a000a8000122a800b0000127b000c0000122c000c8000127cc00d0000124d000d8000122d800e0000120e000e800011ee800f000011df000f800011b`), music.PlaybackMode.LoopingInBackground)
+}
+function MOMDADSROOM () {
+    music.stopAllSounds()
+    music.setVolume(20)
+    tiles.setCurrentTilemap(tilemap`level28`)
+    music.play(music.createSong(hex`0096000408200200001c00010a006400f401640000040000000000000000000000000005000004aa0400000800021d2408000b00021d240b000e00021d240e001100021d2411001900021d2519002000021d2520002800021b2728003000021d2430004000021d2540004800021d2448004b00021d244b004e00021d244e005100021d2451005900021d2559006000021d2560006800021b2768007000021d2470008000021d2580008600012286008800012488008e0001228e009000012090009600011e96009800011d98009e00011b9e00a0000118a000a6000120a600a8000122a800ae000120ae00b000011eb000b600011db600b800011bb800be000119be00c000011dc000c600011bc600c8000119c800ce000118ce00d000011ed000d600011dd600d800011bd800de000119de00e0000120e000e6000122e600e8000120e800ee00011eee00f000011df000f8000124f8000001021b2400010801021d2408010b01021d240b010e01021d240e011101021d2411011901021d2519012001021d2520012801021b2728013001021d2430014001021d2540014801021d2448014b01021d244b014e01021d244e015101021d2451015901021d2559016001021d2560016801021b2768017001021d2470018001021d2580018601012286018801012488018e0101228e019001012090019601011e96019801011d98019e01011b9e01a001011ea001a6010124a601a8010125a801ae010124ae01b0010122b001b6010120b601b801011eb801be01011dbe01c0010120c001c6010125c601c8010124c801ce010122ce01d0010125d001d6010127d601d8010125d801de010124de01e0010127e001e6010129e601e8010127e801ee010125ee01f0010127f001f8010124f801000202242c00020802012008020b0201200b020e0201200e021102012011021902011d19022002011920022802011628023002011230023402010f34023802010c3802400202252c4002480202202948025002022025500258020219225802600202191e60026802021b2268027002022225700278020220277802800202242c80028802012088028b0201208b028e0201208e029102012091029902011d9902a0020119a002a8020116a802b0020112b002b402010fb402b802012cb802bc02012abc02c002012ac002c4020129c402c8020127c802cc020125cc02d0020124d002d4020122d402d8020120d802dc02011edc02e002011de002e402011be402e8020119e802ec020118ec02f0020116f002f802011800030803021d2408030b03021d240b030e03021d240e031103021d2411031903021d2519032003021d2520032803021b2728033003021d2430034003021d2540034803021d2448034b03021d244b034e03021d244e035103021d2451035903021d2559036003021d2560036803021b2768037003021d2470038003021d2580038603012286038803012488038e0301228e039003012090039603011e96039803011d98039e03011b9e03a003011ea003a6030124a603a8030125a803ae030124ae03b0030122b003b6030120b603b803011eb803be03011dbe03c0030120c003c6030125c603c8030124c803ce030122ce03d0030125d003d6030127d603d8030125d803de030124de03e0030127e003e6030129e603e8030127e803ee030125ee03f0030127f003f8030129f803000402202906001c00010a006400f401640000040000000000000000000000000000000002060300000800011808000b0001180b000e0001180e001100011811001900011819002000011820002800011828003000011830004000011840004800011848004b0001184b004e0001184e005100011851005900011859006000011860006800011868007000011870008000011880009800011d9800a0000116a000b800011bb800c0000114c000c8000119c800d0000112d000e0000118e000f0000111f000f8000112f8000001010f00010801011808010b0101180b010e0101180e011101011811011901011819012001011820012801011828013001011830014001011840014801011848014b0101184b014e0101184e015101011851015901011859016001011860016801011868017001011870018001011880019801011d9801a0010116a001b801011eb801c0010118c001c8010120c801d8010122d801e0010124e001e8010124e801f0010125f001f801011ef8010002012400020802011b08020b02011b0b020e02011b0e021102011b11021902011d28023002011230023402010f34023802010c38023c02010d3c024002010f40024402011144024802011248024c0201144c025002011450025402011654025802011858025c0201195c026002011860026402011664026802011468026c0201126c027002011170027402010f74027802010d78028002010c80028802011b88028b02011b8b028e02011b8e029102011b91029902011da802b0020116b002b8020112c002c8020111c802d002010cd002d8020111d802e0020116e002e802010fe802f0020116f002f8020112f802fb02011bfb02fe02011bfe020103011b01030803011808030b0301180b030e0301180e031103011811031903011819032003011820032803011828033003011830034003011840034803011848034b0301184b034e0301184e035103011851035903011859036003011860036803011868037003011870038003011880039803011d9803a0030116a003b803011eb803c0030118c003c8030119c803d0030122d003d803011bd803e003011ee003e8030120e803f003011bf003f8030120f80300040114`), music.PlaybackMode.LoopingInBackground)
+}
 sprites.onOverlap(SpriteKind.PLATE, SpriteKind.FOOD1, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
+    music.setVolume(50)
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     info.changeScoreBy(1)
 })
 function Kit_corner_movement () {
@@ -356,6 +352,8 @@ function Kit_corner_movement () {
 sprites.onOverlap(SpriteKind.Spider, SpriteKind.Player, function (sprite, otherSprite) {
     music.setVolume(50)
     music.play(music.melodyPlayable(music.wawawawaa), music.PlaybackMode.InBackground)
+    info.changeLifeBy(-1)
+    scene.cameraShake(5, 200)
     pause(1000)
 })
 function DADSECONDINTERACTION () {
@@ -600,30 +598,580 @@ function SARAHSECONDINTERACTION () {
     sprites.destroy(SARAH)
     Keys = 2
 }
-function Guessing_Game () {
-    music.stopAllSounds()
-    tiles.setCurrentTilemap(tilemap`level32`)
-    tiles.placeOnTile(John, tiles.getTileLocation(5, 15))
-    color.startFade(color.Black, color.originalPalette, 500)
-    color.pauseUntilFadeDone()
-    music.play(music.createSong(hex`0082000408080106001c00010a006400f401640000040000000000000000000000000000000002c00000000800012208001000012710001800012218002000011b20002800012228003000012730004000012240004800012248005000012750005800012258006000012760006800012a6c007000012970007400012774007800012578007c0001247c008000012480008800012288009000012790009800012298009c00011e9c00a0000120a000a8000122a800b0000127b000c0000122c000c8000127cc00d0000124d000d8000122d800e0000120e000e800011ee800f000011df000f800011b`), music.PlaybackMode.LoopingInBackground)
-}
 info.onScore(25, function () {
     Lizard_Spawn = 2
 })
+function AJS_ROOM () {
+    music.stopAllSounds()
+    music.setVolume(20)
+    music.play(music.createSong(assets.song`LULLABY`), music.PlaybackMode.LoopingInBackground)
+    tiles.setCurrentTilemap(tilemap`level49`)
+    MIRROR = sprites.create(img`
+        . . e e f . . . f f b e e . . . 
+        . . e 4 e f f f e f b e e e . . 
+        . . f f f f b 4 f f b e e e e . 
+        f f 6 7 b f 4 f b e e b e e e . 
+        f f 6 7 7 e 4 f f e e e e e e e 
+        . f 6 7 7 e 4 4 b b e e e e e e 
+        . f 6 7 7 e 4 4 b b b e b e e e 
+        f f 6 7 7 e 4 f f e b e b b e e 
+        f f 6 7 b f 4 f b e e e e e e . 
+        . . f f f f b 4 f b e e e e e . 
+        . . e 4 e f f f e b b e e e . . 
+        . . e e f . . . f f b b b . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.AJR)
+    tiles.placeOnTile(MIRROR, tiles.getTileLocation(5, 1))
+    animation.runImageAnimation(
+    MIRROR,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . e e f . . . e e c e e . . . 
+        . . e 4 e f f f e e c e e e . . 
+        . . f f f f e 4 e e c e e e e . 
+        f f 6 7 b f 4 f b e e c e e e . 
+        f f 6 7 7 e 4 f f e e e e e e e 
+        . f 6 7 7 e 4 4 b b e e e e e e 
+        . f 6 7 7 e 4 4 b b b e c e e e 
+        f f 6 7 7 e 4 f f e b e c c e e 
+        f f 6 7 b f 4 f b e e e e e e . 
+        . . f f f f e 4 f c e e e e e . 
+        . . e 4 e f f f e c c e e e . . 
+        . . e e f . . . e e c c c . . . 
+        `,img`
+        . . . 2 2 2 . . . . . . . . . . 
+        . . . . . 2 . . . . . 2 2 2 . . 
+        . . . . 2 . . 2 2 2 . . . 2 . . 
+        . . . 2 . . . . . 2 . . 2 . . . 
+        . . . 2 2 2 . . 2 . . 2 . . . . 
+        . . . . . . . 2 . . . 2 2 2 . . 
+        . . e e f . . 2 2 2 c e e . . . 
+        . . e 4 e f f f e e e e e e . . 
+        . . f f f f e 4 e e e e e e e . 
+        f f 6 7 b f 4 f f e e c e e e . 
+        f f 6 7 7 e 4 f b e e e e e e e 
+        . f 6 7 7 e 4 4 b b e e e e e e 
+        . f 6 7 7 e 4 4 b e e e c e e e 
+        f f 6 7 7 e e e e e e e e e e e 
+        f f 6 7 b f e e e e e e e e e . 
+        . . f f f f e e e c e e e e e . 
+        . . e 4 e f f f e c c e e e . . 
+        . . e e f . . . e e c c c . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . e e f . . . e e c e e . . . 
+        . . e 4 e f f f e e c e e e . . 
+        . . f f f f e 4 e e c e e e e . 
+        f f 6 7 b f 4 f b e e c e e e . 
+        f f 6 7 7 e 4 f f e e e e e e e 
+        . f 6 7 7 e 4 4 b b e e e e e e 
+        . f 6 7 7 e 4 4 b b b e c e e e 
+        f f 6 7 7 e 4 f f e b e c c e e 
+        f f 6 7 b f 4 f b e e e e e e . 
+        . . f f f f e 4 f c e e e e e . 
+        . . e 4 e f f f e c c e e e . . 
+        . . e e f . . . e e c c c . . . 
+        `,img`
+        . 2 2 2 . . 2 2 2 2 . . . . . . 
+        . . . 2 . . . . . 2 . . . . . . 
+        . . 2 . . . . . 2 . . . 2 2 2 . 
+        . 2 . . . . . 2 . . . . . . 2 . 
+        . 2 2 2 . . 2 . . . . . . 2 . . 
+        . . . . . . 2 2 2 2 . . 2 . . . 
+        . . e e f . . . e e c e 2 2 2 . 
+        . . e 4 e f f f e e c e e e . . 
+        . . f f f f e e e e c e e e e . 
+        f f 6 7 b f e e e e e e e e e . 
+        f f 6 7 7 e e e e e e e e e e e 
+        . f 6 7 7 e 4 4 b e e e e e e e 
+        . f 6 7 7 e 4 4 b b b e c e e e 
+        f f 6 7 7 e 4 f b e b e c c e e 
+        f f 6 7 b f 4 f f e e e e e e . 
+        . . f f f f e 4 b c e e e e e . 
+        . . e 4 e f f f e c c e e e . . 
+        . . e e f . . . e e c c c . . . 
+        `],
+    500,
+    true
+    )
+}
 function MOMSECONDINTERACTION () {
     game.showLongText("THANK YOU SO MUCH JOHN! NOW I CAN GO AND OPEN PRESENTS!", DialogLayout.Bottom)
     game.showLongText("CAN YOU PLEASE GO WAKE UP YOUR BROTHER", DialogLayout.Bottom)
     game.showLongText("BE CAREFUL THOUGH HE HAS BEEN VERY SLEEPY LATELY", DialogLayout.Bottom)
-    sprites.destroy(MOM, effects.halo, 500)
-    Keys = 3
+    sprites.destroy(MOM2, effects.halo, 500)
+    Keys = 4
 }
+info.onScore(100, function () {
+    LILTEDDYSPAWN = 0
+    ENDGAME = 1
+    sprites.destroyAllSpritesOfKind(SpriteKind.Projectile)
+    sprites.destroyAllSpritesOfKind(SpriteKind.BIGTEDDY)
+    sprites.destroyAllSpritesOfKind(SpriteKind.PRESENTS)
+    game.showLongText("YOU DID IT!!!", DialogLayout.Bottom)
+    color.startFade(color.originalPalette, color.White)
+    color.pauseUntilFadeDone()
+    tiles.setCurrentTilemap(tilemap`level41`)
+    Kathleen = sprites.create(img`
+        . . . . . f f e e f f . . . . . 
+        . . . . e e e e e e e f . . . . 
+        . . . f e e e e e e e e f . . . 
+        . . f e e e e e e e e e e f . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e b e 4 4 e b e e e f . 
+        . f e e f f 4 4 4 4 f f e e f . 
+        . f e e f b f 4 4 f b f e e f . 
+        . f e e d 1 f 4 4 f 1 d e e f . 
+        f f e e f 4 4 4 4 4 4 f e e f f 
+        f e e f f f d d d d f f f e e f 
+        . f d d f b 7 7 7 7 b f d d f . 
+        . . d 4 c 7 7 7 7 7 7 c 4 d . . 
+        . . d f b 7 b 7 b 7 b b f d . . 
+        . . . f f 7 d 7 d 7 d f f . . . 
+        . . . . . f f b b f f . . . . . 
+        `, SpriteKind.Kat)
+    SARAH = sprites.create(img`
+        . e e e . e e e e . e e e . 
+        e 5 5 e e 5 5 5 5 e e 5 5 e 
+        e 5 e e b 5 5 5 5 b e e 5 e 
+        e e e 4 3 5 5 5 5 3 4 e e e 
+        . e 3 3 5 5 5 5 5 5 3 3 e . 
+        . e 5 5 5 5 4 4 5 5 5 5 e . 
+        . e e 5 5 4 4 4 4 5 5 e e . 
+        . e e e b f 4 4 f b e e e . 
+        . e e 4 1 f d d f 1 4 e e . 
+        . . e e d d d d d d e e . . 
+        . . f e f 4 4 4 4 f e f . . 
+        . f 4 e b 3 3 3 3 b e 4 f . 
+        . 4 d f 3 3 3 3 3 3 f d 4 . 
+        . 4 4 f 6 6 6 6 6 6 f 4 4 . 
+        . . . . f f f f f f . . . . 
+        . . . . f f . . f f . . . . 
+        `, SpriteKind.SMR)
+    Dad = sprites.create(img`
+        . . . . f f f f . . . . 
+        . . f f e e e e f f . . 
+        . f f e e e e e e f f . 
+        f f f f 4 e e e f f f f 
+        f f f 4 4 4 e e f f f f 
+        f f f 4 4 4 4 e e f f f 
+        f 4 e 4 4 4 4 4 4 e 4 f 
+        f 4 4 f f 4 4 f f 4 4 f 
+        f e 4 d d d d d d 4 e f 
+        . f e d d b b d d e f . 
+        . f f e 4 4 4 4 e f f . 
+        e 4 f b 2 2 2 2 b f 4 e 
+        4 d f 2 2 2 2 2 2 f d 4 
+        4 4 f 1 1 1 1 1 1 f 4 4 
+        . . . f f f f f f . . . 
+        . . . f f . . f f . . . 
+        `, SpriteKind.Mark)
+    MOM2 = sprites.create(img`
+        . . . . . f f f f . . . . . 
+        . . . f f e e e e f f . . . 
+        . . f e e e e e e e e f . . 
+        . f e e e e e e e e e e f . 
+        . f e e e d b b d e e e f . 
+        f e e e b 4 4 4 4 b e e e f 
+        f e e c c 4 4 4 4 c c e e f 
+        f b b f b f 4 4 f b f b b f 
+        f b b 4 1 f d d f 1 4 b b f 
+        . f b f d d d d d d f b f . 
+        . f e f e 4 4 4 4 e f e f . 
+        . e 4 f 6 9 9 9 9 6 f 4 e . 
+        . 4 d c 9 9 9 9 9 9 c d 4 . 
+        . 4 f b 3 b 3 b 3 b b f 4 . 
+        . . f f 3 b 3 b 3 3 f f . . 
+        . . . . f f b b f f . . . . 
+        `, SpriteKind.MOM)
+    AJ = sprites.create(img`
+        . . . . e e e e . . . . . 
+        . . e e e e e e e e . . . 
+        . e e e e e e b e e e . . 
+        e e e e e e b b e e e b . 
+        e e e b e e e e e e e b . 
+        b b b e e e b b e e b b . 
+        f f f e e b b e e b b f . 
+        f e f b f b b f b f e f . 
+        . f 4 1 f 4 4 f 1 4 f . . 
+        . f b 4 4 4 4 4 4 b f . . 
+        . f f f e e e e f f f . . 
+        f e f b 7 7 7 7 b f e f . 
+        e 4 f 7 7 7 7 7 7 f 4 e . 
+        e e f 6 6 6 6 6 6 f e e . 
+        . . . f f f f f f . . . . 
+        . . . f f . . f f . . . . 
+        `, SpriteKind.AJR)
+    THEPRESENT = sprites.create(img`
+        . . . . f 2 2 f . f 2 2 f . . . 
+        . . . . 2 f f 2 f 2 f f 2 . . . 
+        . f f f 2 f f 2 f 2 f f 2 . . . 
+        . f f 3 3 2 2 2 3 2 2 2 f . . . 
+        . f 3 f 3 3 3 3 2 3 3 3 3 f . . 
+        . f 3 2 f 3 3 3 3 2 3 3 3 3 f . 
+        . f 3 2 3 f f f f f f f f f f f 
+        . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+        . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+        . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+        . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+        . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+        . . f 2 3 f 3 3 3 2 2 2 3 3 3 f 
+        . . . f 3 f 3 3 3 2 2 2 3 3 3 f 
+        . . . . f f 3 3 3 2 2 2 3 3 3 f 
+        . . . . . f f f f f f f f f f f 
+        `, SpriteKind.THEPRESENT)
+    CHRISTMAS_TREE = sprites.create(img`
+        ........................
+        ...........66...........
+        ..........6776..........
+        ..........6776..........
+        .........877778.........
+        ........86777768........
+        .......6777777776.......
+        ......677677776776......
+        ......866777777668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....86868868868668.....
+        ....866888668888868.....
+        ....8688886888888888....
+        ....8886688888866888....
+        ....8676888868886768....
+        ...87778868678688776....
+        ..8777767767787767778...
+        .877767777777677776778..
+        .8866777777777777776778.
+        .8667776776767776777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888688888
+        8668868866888866888868..
+        88886686688888868688668.
+        .8688888888888888668868.
+        .8878888868868878868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `, SpriteKind.CHRISTMASTREE)
+    tiles.placeOnTile(CHRISTMAS_TREE, tiles.getTileLocation(14, 2))
+    animation.runImageAnimation(
+    CHRISTMAS_TREE,
+    [img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ...........55...........
+        ...........55...........
+        ..........6776..........
+        ..........6776..........
+        .........877778.........
+        ........86777768........
+        .......6727777276.......
+        ......677627726776......
+        ......866777777668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....86868868868668.....
+        ....866188668888868.....
+        ....8688886881881888....
+        ....8886688888866888....
+        ....8676881868886768....
+        ...87778868678688776....
+        ..8777767767787767778...
+        .877267777777677776278..
+        .8866772777277727776778.
+        .8667776776767776777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888688888
+        8668868866888866888168..
+        88886686618888868688668.
+        .8681888888888188668868.
+        .8878888868868878868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `,img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........5..5..........
+        ...........55...........
+        ...........55...........
+        ..........5775..........
+        ..........6776..........
+        .........877778.........
+        ........86777768........
+        .......6727777276.......
+        ......677627726776......
+        ......866777777668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....85858868868668.....
+        ....866188668585858.....
+        ....8658586851581888....
+        ....8886658585856588....
+        ....8676881868886768....
+        ...87778858578688776....
+        ..8777767767787767778...
+        .877267777777677776278..
+        .8866772777277727776778.
+        .8667776776767776777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888658888
+        8668868865888866885158..
+        88885686515888568685668.
+        .8651588858885158668868.
+        .8875888868868578868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `,img`
+        ........................
+        ........................
+        ........................
+        .........5....5.........
+        ..........5555..........
+        ..........5555..........
+        ..........5555..........
+        ..........5555..........
+        .........567765.........
+        .........877778.........
+        ........86777768........
+        .......6727227276.......
+        ......677627726776......
+        ......866272272668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....86868868868668.....
+        ....866188668888868.....
+        ....8688886881881888....
+        ....8886688888866888....
+        ....8676881868886768....
+        ...87778868678688776....
+        ..8727767767787767728...
+        .872227277727672772228..
+        .8862722272227222772778.
+        .8667772776267726777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888688888
+        8668868866888866888168..
+        88886686618888868688668.
+        .8681888888888188668868.
+        .8878888868868878868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `,img`
+        ........................
+        .......5...55...5.......
+        ........5......5........
+        .........5.55.5.........
+        ..........5555..........
+        .....5.5.555555.5.5.....
+        .....5.5.555555.5.5.....
+        ..........5555..........
+        .........567765.........
+        ........58777785........
+        .......5867777685.......
+        .......6727227276.......
+        ......677627726776......
+        ......866272272668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....85858868868668.....
+        ....866188668585858.....
+        ....8658586851581888....
+        ....8886658585856588....
+        ....8676881868886768....
+        ...87778858578688776....
+        ..8272767767787767728...
+        .877262727727672772228..
+        .8826272772227222772778.
+        .8667726276267726777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888658888
+        8668868865888866885158..
+        88885686515888568685668.
+        .8651588858885158668868.
+        .8875888868868578868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `,img`
+        ........................
+        ........................
+        ........................
+        .........5....5.........
+        ..........5555..........
+        ..........5555..........
+        ..........5555..........
+        ..........5555..........
+        .........567765.........
+        .........877778.........
+        ........86777768........
+        .......6727227276.......
+        ......677627726776......
+        ......866272272668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....85858868868668.....
+        ....866188668585858.....
+        ....8658586851581888....
+        ....8886658585856588....
+        ....8676881868886768....
+        ...87778858578688776....
+        ..8272767767787767728...
+        .877262727727672772228..
+        .8826272772227222772778.
+        .8667726276267726777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888658888
+        8668868865888866885158..
+        88885686515888568685668.
+        .8651588858885158668868.
+        .8875888868868578868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `,img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........5..5..........
+        ...........55...........
+        ...........55...........
+        ..........5775..........
+        ..........6776..........
+        .........877778.........
+        ........86777768........
+        .......6727777276.......
+        ......677627726776......
+        ......866777777668......
+        .....86677677677668.....
+        ....8668866766888668....
+        ....8888668886686888....
+        .....85858868868668.....
+        ....866188668585858.....
+        ....8658586851581888....
+        ....8886658585856588....
+        ....8676881868886768....
+        ...87778858578688776....
+        ..8777767767787767778...
+        .877267777777677776278..
+        .8866772777277727776778.
+        .8667776776767776777688.
+        ..887766768668776667668.
+        ..8688668886688686688668
+        .86688688686866888658888
+        8668868865888866885158..
+        88885686515888568685668.
+        .8651588858885158668868.
+        .8875888868868578868788.
+        .87768776788778777667788
+        877677767787776767776778
+        88877787766777777877788.
+        ..88886786777667768888..
+        .....86887786668868.....
+        ......8886888668888.....
+        .........88ee88.........
+        .........feeeef.........
+        .........feeeef.........
+        ........feeefeef........
+        ........fefeffef........
+        `],
+    200,
+    true
+    )
+    tiles.placeOnTile(Kathleen, tiles.getTileLocation(12, 4))
+    tiles.placeOnTile(SARAH, tiles.getTileLocation(13, 5))
+    tiles.placeOnTile(Dad, tiles.getTileLocation(14, 6))
+    tiles.placeOnTile(MOM2, tiles.getTileLocation(15, 5))
+    tiles.placeOnTile(AJ, tiles.getTileLocation(16, 3))
+    tiles.placeOnTile(HARRY2, tiles.getTileLocation(14, 8))
+    tiles.placeOnTile(John, tiles.getTileLocation(14, 8))
+    tiles.placeOnTile(THEPRESENT, tiles.getTileLocation(17, 1))
+    color.startFade(color.White, color.originalPalette)
+    color.pauseUntilFadeDone()
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.CAGEDHARRY, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         game.showLongText("YOU UNLOCKED THE CRATE!!", DialogLayout.Bottom)
         sprites.destroy(CAGED_HARRY)
         FREED_HARRY += 1
-        HARRY = sprites.create(img`
+        HARRY2 = sprites.create(img`
             . . . . e e e . . . . e e e . . 
             . . . e e e e f . . f e e e e . 
             . . e e e e e e f f e e e e e e 
@@ -639,9 +1187,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.CAGEDHARRY, function (sprite, ot
             . . . f 1 f f 1 f f f 1 f . . . 
             . . . f f . . f f . . f f . . . 
             `, SpriteKind.HARRY)
-        HARRY.sayText("BARK BARK", 200, false)
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(12, 6))
-        HARRY.follow(John, 75)
+        HARRY2.z = John.z - 1
+        HARRY2.sayText("BARK BARK", 200, false)
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(12, 6))
+        HARRY2.follow(John, 75)
     }
 })
 function JKROOM () {
@@ -650,6 +1199,87 @@ function JKROOM () {
     tiles.setCurrentTilemap(tilemap`level2`)
     music.play(music.createSong(assets.song`Andante Festivo`), music.PlaybackMode.LoopingInBackground)
 }
+sprites.onOverlap(SpriteKind.AJR, SpriteKind.Player, function (sprite, otherSprite) {
+    if (controller.A.isPressed()) {
+        AJR_INTERACTIONS += 1
+        if (AJR_INTERACTIONS == 1) {
+            game.showLongText("T....T....T...", DialogLayout.Bottom)
+            game.showLongText("TEDDY BEAR?", DialogLayout.Bottom)
+            music.stopAllSounds()
+            color.startFade(color.originalPalette, color.White, 500)
+            color.pauseUntilFadeDone()
+            tiles.placeOnTile(John, tiles.getTileLocation(1, 1))
+            tiles.placeOnTile(HARRY2, tiles.getTileLocation(1, 1))
+            tiles.setCurrentTilemap(tilemap`level51`)
+            sprites.destroy(MIRROR)
+            BIG_TEDDY = sprites.create(img`
+                ................................
+                .......ff.............ff........
+                ......feef...........feef.......
+                ......fedef.fffffff.fedef.......
+                ......fedeffeeeeeeeffedef.......
+                .......fefeeeeeeeeeeefef........
+                .......fefeefeeeeefeefef........
+                ........feeeefeeefeeeef.........
+                ........feeee2fef2eeeef.........
+                ........feee22eee22eeef.........
+                ........feeeeeeeeeeeeef.........
+                ........feeeeefffeeeeef.........
+                ........feeeeeefeeeeeef.........
+                ........feeefeeeeefeeef.........
+                .........feeefffffeeef..........
+                ........fffeeeeeeeeefff.........
+                .......feeefffffffffeeef........
+                ......feeeeeefeefeeeeeeef.......
+                .....feeeeeef2ff2feeeeeeef......
+                .....feeeeeef2222feeeeeeef......
+                .....feeefeef2ff2feeefeeef......
+                .....feeeefeefeefeeefeeeef......
+                ......feeeeffeeeeeffeeeef.......
+                .......ffefeefeeefeefeff........
+                .......fefedefeeefedefef........
+                .......feefffeeeeefffeeff.......
+                ......feeeeeeeeeeeeeeeeeef......
+                ....ffeeeeeeeeeeeeeeeeeeeeff....
+                ...feeeeeefffffffffffeeeeeeef...
+                ..feeeeeef...........feeeeeeef..
+                ..feeeeef.............feeeeeef..
+                ...fffff...............ffffff...
+                `, SpriteKind.BIGTEDDY)
+            tiles.placeOnTile(BIG_TEDDY, tiles.getTileLocation(10, 10))
+            PRESENTS2 = sprites.create(img`
+                . . . . f 2 2 f . f 2 2 f . . . 
+                . . . . 2 f f 2 f 2 f f 2 . . . 
+                . f f f 2 f f 2 f 2 f f 2 . . . 
+                . f f 3 3 2 2 2 3 2 2 2 f . . . 
+                . f 3 f 3 3 3 3 2 3 3 3 3 f . . 
+                . f 3 2 f 3 3 3 3 2 3 3 3 3 f . 
+                . f 3 2 3 f f f f f f f f f f f 
+                . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+                . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+                . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+                . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+                . f 3 2 3 f 3 3 3 2 2 2 3 3 3 f 
+                . . f 2 3 f 3 3 3 2 2 2 3 3 3 f 
+                . . . f 3 f 3 3 3 2 2 2 3 3 3 f 
+                . . . . f f 3 3 3 2 2 2 3 3 3 f 
+                . . . . . f f f f f f f f f f f 
+                `, SpriteKind.PRESENTS)
+            tiles.placeOnRandomTile(PRESENTS2, sprites.dungeon.floorDark0)
+            color.startFade(color.White, color.originalPalette, 500)
+            color.pauseUntilFadeDone()
+            game.showLongText("IT LOOKS LIKE A TEDDY BEAR STOLE ALL OF OUR PRESENTS", DialogLayout.Bottom)
+            game.showLongText("COLLECT 10 OF THEM TO WIN", DialogLayout.Bottom)
+            music.play(music.createSong(assets.song`Winter 4 Seasons`), music.PlaybackMode.LoopingInBackground)
+            LILTEDDYSPAWN = 1
+        }
+        if (AJR_INTERACTIONS >= 2) {
+            game.showLongText("IT LOOKS LIKE THERE'S ONE MORE GIFT", DialogLayout.Bottom)
+            game.showLongText("IT SAYS IT'S FOR THE WHOLE FAMILY ", DialogLayout.Bottom)
+            game.showLongText("YOU SHOULD OPEN IT!", DialogLayout.Bottom)
+        }
+    }
+})
 sprites.onOverlap(SpriteKind.SMR, SpriteKind.Player, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         SARAHINTERACTIONS += 1
@@ -659,21 +1289,169 @@ sprites.onOverlap(SpriteKind.SMR, SpriteKind.Player, function (sprite, otherSpri
         if (SARAHINTERACTIONS == 2) {
             SARAHSECONDINTERACTION()
         }
+        if (SARAHINTERACTIONS >= 3) {
+            game.showLongText("I GOT A BOOK!!!", DialogLayout.Bottom)
+        }
     }
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    sprites.destroy(otherSprite)
-    info.changeScoreBy(-5)
-    music.setVolume(50)
-    music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.InBackground)
-    scene.cameraShake(5, 200)
-})
-function SARAHS_ROOM () {
+function BASEMENT () {
     music.stopAllSounds()
-    music.setVolume(5)
-    tiles.setCurrentTilemap(tilemap`level19`)
-    music.play(music.createSong(assets.song`SUGAR PLUM`), music.PlaybackMode.LoopingInBackground)
+    music.setVolume(20)
+    music.play(music.createSong(assets.song`Symphony 9`), music.PlaybackMode.LoopingInBackground)
+    tiles.setCurrentTilemap(tilemap`level47`)
+    PONG_TABLE = sprites.create(img`
+        88888888888888888888888888888888
+        81111111111111111111111111111118
+        818888de888888818188888888888818
+        8188888de88888818188888888888818
+        81888888dfff88818188888888888818
+        81888888fffff8818188888888888818
+        81888888fffff8818188888888888818
+        81888888fffff8818188888888888818
+        818888888fff88818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        11111111111111111111111111111111
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188222888888818
+        81888888888888818182222288888818
+        81888888888888818182222288888818
+        81888888888888818182222288888818
+        81888888888888818188222d88888818
+        81888888888888818188888ed8888818
+        818888888888888181888888ed888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81888888888888818188888888888818
+        81111111111111111111111111111118
+        88888888888888888888888888888888
+        `, SpriteKind.GAME)
+    POOL_TABLE = sprites.create(img`
+        eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+        eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+        eeff777777777777777777fff7777777777777777777ffee
+        eef77777777777777777777f777777777777777777777fee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee777777dd777777777777777777777777777777557777ee
+        ee777777eeddd777777777777777777777777777557777ee
+        ee77777777eeeddd777777777777777777777777777777ee
+        ee77777777777eeeddd777777777777777777777777777ee
+        ee77777777777777eeeddd777777777777777777777777ee
+        ee77777777777777777eeeddd777777777777777777777ee
+        ee77777777777777777777eeeddd777777777777777777ee
+        ee77777777777777777777777eeeddd777777777777777ee
+        ee77777777777777777777777777eeeddf771177777777ee
+        ee77777777777777777777777777777eef771177777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777722777777777777777777777777777777777777ee
+        ee77777722777777777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777777777ee
+        ee77777777778877777777777777777777777777777777ee
+        ee77777777778877777777777777777777777777777777ee
+        ee77777777777777777777777777777777777777744777ee
+        ee77777777777777777777777777777777777777744777ee
+        eef77777777777777777777f777777777777777777777fee
+        eeff777777777777777777fff7777777777777777777ffee
+        eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+        eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+        `, SpriteKind.GAME)
+    FOOSBALL = sprites.create(img`
+        ........eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee........
+        ........eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee........
+        ........eefffffff1ffffffffffff1fffffffee........
+        ........eefffffff1ffffffffffff1fffffffee........
+        ........eefffffff1ffffffffffff1fffffffee........
+        ........ee1111111111111111111111111111ee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........ee11fffffffffff8ffffffffffff11ee........
+        ........eebbbbbbbbbbbb888bbbbbbbbbbbbbeebbbbbee.
+        ........eefffffffffffff8ffffffffffffffee........
+        ........ee1111111111111111111111111111ee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........ee11ffffffffffffffffffffffff11ee........
+        ........eeffffffff2ffffffffff2ffffffffee........
+        .eebbbbbeebbbbbbb222bbbbbbbb222bbbbbbbee........
+        ........ee1111111121111111111211111111ee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........ee11f8fffff8fffff8fffff8ffff18ee........
+        ........eebb888bbb888bbb888bbb888bbb88eebbbbbbee
+        ........eefff8fffff8fffff8fffff8fffff8ee........
+        ........ee1111111111111111111111111111ee........
+        ........eef2ffff2fffff2fffff2fffff2fffee........
+        .eebbbbbeeb22bb222bbb222bbb222bbb222bbee........
+        ........ee12ffff2fffff2fffff2fffff2f11ee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........ee1111118111111111111181111111ee........
+        ........eebbbbb888bbbbbbbbbbb888bbbbbbeebbbbbee.
+        ........eeffffff8fffffffffffff8fffffffee........
+        ........ee11ffffffffffffffffffffffff11ee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........ee1111111111111121111111111111ee........
+        .eebbbbbeebbbbbbbbbbbbb222bbbbbbbbbbbbee........
+        ........eeffffffffffffff2fffffffffffffee........
+        ........ee11ffffffffffffffffffffffff11ee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........eeffffffffffffffffffffffffffffee........
+        ........ee1111111111111111111111111111ee........
+        ........eeffffffff1fffffffffff1fffffffee........
+        ........eeffffffff1fffffffffff1fffffffee........
+        ........eeffffffff1fffffffffff1fffffffee........
+        ........eeffffffff1fffffffffff1fffffffee........
+        ........eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee........
+        ........eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee........
+        `, SpriteKind.GAME)
+    tiles.placeOnTile(PONG_TABLE, tiles.getTileLocation(7, 4))
+    tiles.placeOnTile(POOL_TABLE, tiles.getTileLocation(3, 3))
+    tiles.placeOnTile(FOOSBALL, tiles.getTileLocation(3, 11))
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    if (AJR_INTERACTIONS == 0) {
+        sprites.destroy(otherSprite)
+        info.changeScoreBy(-5)
+        music.setVolume(50)
+        music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.InBackground)
+        scene.cameraShake(5, 200)
+    } else {
+        sprites.destroy(otherSprite)
+        music.setVolume(50)
+        music.play(music.melodyPlayable(music.smallCrash), music.PlaybackMode.InBackground)
+        info.changeLifeBy(-1)
+        scene.cameraShake(5, 200)
+    }
+})
 info.onScore(90, function () {
     if (MOMINTERACTIONS == 1) {
         info.stopCountdown()
@@ -683,7 +1461,7 @@ info.onScore(90, function () {
         game.showLongText("YOU DID IT!!!", DialogLayout.Bottom)
         color.startFade(color.originalPalette, color.White)
         color.pauseUntilFadeDone()
-        sprites.destroy(PLATE)
+        sprites.destroy(PLATE2)
         scene.setBackgroundImage(img`
             ................................................................................................................................................................
             ................................................................................................................................................................
@@ -827,7 +1605,7 @@ info.onScore(90, function () {
             `, SpriteKind.Player)
         controller.moveSprite(John)
         scene.cameraFollowSprite(John)
-        MOM = sprites.create(img`
+        MOM2 = sprites.create(img`
             . . . . . f f f f . . . . . 
             . . . f f e e e e f f . . . 
             . . f e e e e e e e e f . . 
@@ -1170,10 +1948,10 @@ info.onScore(90, function () {
         true
         )
         tiles.placeOnTile(John, tiles.getTileLocation(11, 10))
-        tiles.placeOnTile(MOM, tiles.getTileLocation(10, 10))
+        tiles.placeOnTile(MOM2, tiles.getTileLocation(10, 10))
         tiles.placeOnTile(CHRISTMAS_TREE, tiles.getTileLocation(14, 2))
         if (FREED_HARRY == 1) {
-            HARRY = sprites.create(img`
+            HARRY2 = sprites.create(img`
                 . . . . e e e . . . . e e e . . 
                 . . . e e e e f . . f e e e e . 
                 . . e e e e e e f f e e e e e e 
@@ -1189,9 +1967,10 @@ info.onScore(90, function () {
                 . . . f 1 f f 1 f f f 1 f . . . 
                 . . . f f . . f f . . f f . . . 
                 `, SpriteKind.HARRY)
-            tiles.placeOnTile(HARRY, tiles.getTileLocation(12, 10))
-            HARRY.sayText("BARK BARK", 200, false)
-            HARRY.follow(John, 75)
+            HARRY2.z = John.z - 1
+            tiles.placeOnTile(HARRY2, tiles.getTileLocation(12, 10))
+            HARRY2.sayText("BARK BARK", 200, false)
+            HARRY2.follow(John, 75)
         } else {
             CAGED_HARRY = sprites.create(img`
                 dddddddddddddddddddd
@@ -1227,11 +2006,11 @@ function TransitionFadeToBlack (Time: number) {
     color.pauseUntilFadeDone()
     color.startFade(color.Black, color.originalPalette, Time / 2)
 }
-function MOMDADSROOM () {
+function SARAHS_ROOM () {
     music.stopAllSounds()
-    music.setVolume(20)
-    tiles.setCurrentTilemap(tilemap`level28`)
-    music.play(music.createSong(hex`0096000408200200001c00010a006400f401640000040000000000000000000000000005000004aa0400000800021d2408000b00021d240b000e00021d240e001100021d2411001900021d2519002000021d2520002800021b2728003000021d2430004000021d2540004800021d2448004b00021d244b004e00021d244e005100021d2451005900021d2559006000021d2560006800021b2768007000021d2470008000021d2580008600012286008800012488008e0001228e009000012090009600011e96009800011d98009e00011b9e00a0000118a000a6000120a600a8000122a800ae000120ae00b000011eb000b600011db600b800011bb800be000119be00c000011dc000c600011bc600c8000119c800ce000118ce00d000011ed000d600011dd600d800011bd800de000119de00e0000120e000e6000122e600e8000120e800ee00011eee00f000011df000f8000124f8000001021b2400010801021d2408010b01021d240b010e01021d240e011101021d2411011901021d2519012001021d2520012801021b2728013001021d2430014001021d2540014801021d2448014b01021d244b014e01021d244e015101021d2451015901021d2559016001021d2560016801021b2768017001021d2470018001021d2580018601012286018801012488018e0101228e019001012090019601011e96019801011d98019e01011b9e01a001011ea001a6010124a601a8010125a801ae010124ae01b0010122b001b6010120b601b801011eb801be01011dbe01c0010120c001c6010125c601c8010124c801ce010122ce01d0010125d001d6010127d601d8010125d801de010124de01e0010127e001e6010129e601e8010127e801ee010125ee01f0010127f001f8010124f801000202242c00020802012008020b0201200b020e0201200e021102012011021902011d19022002011920022802011628023002011230023402010f34023802010c3802400202252c4002480202202948025002022025500258020219225802600202191e60026802021b2268027002022225700278020220277802800202242c80028802012088028b0201208b028e0201208e029102012091029902011d9902a0020119a002a8020116a802b0020112b002b402010fb402b802012cb802bc02012abc02c002012ac002c4020129c402c8020127c802cc020125cc02d0020124d002d4020122d402d8020120d802dc02011edc02e002011de002e402011be402e8020119e802ec020118ec02f0020116f002f802011800030803021d2408030b03021d240b030e03021d240e031103021d2411031903021d2519032003021d2520032803021b2728033003021d2430034003021d2540034803021d2448034b03021d244b034e03021d244e035103021d2451035903021d2559036003021d2560036803021b2768037003021d2470038003021d2580038603012286038803012488038e0301228e039003012090039603011e96039803011d98039e03011b9e03a003011ea003a6030124a603a8030125a803ae030124ae03b0030122b003b6030120b603b803011eb803be03011dbe03c0030120c003c6030125c603c8030124c803ce030122ce03d0030125d003d6030127d603d8030125d803de030124de03e0030127e003e6030129e603e8030127e803ee030125ee03f0030127f003f8030129f803000402202906001c00010a006400f401640000040000000000000000000000000000000002060300000800011808000b0001180b000e0001180e001100011811001900011819002000011820002800011828003000011830004000011840004800011848004b0001184b004e0001184e005100011851005900011859006000011860006800011868007000011870008000011880009800011d9800a0000116a000b800011bb800c0000114c000c8000119c800d0000112d000e0000118e000f0000111f000f8000112f8000001010f00010801011808010b0101180b010e0101180e011101011811011901011819012001011820012801011828013001011830014001011840014801011848014b0101184b014e0101184e015101011851015901011859016001011860016801011868017001011870018001011880019801011d9801a0010116a001b801011eb801c0010118c001c8010120c801d8010122d801e0010124e001e8010124e801f0010125f001f801011ef8010002012400020802011b08020b02011b0b020e02011b0e021102011b11021902011d28023002011230023402010f34023802010c38023c02010d3c024002010f40024402011144024802011248024c0201144c025002011450025402011654025802011858025c0201195c026002011860026402011664026802011468026c0201126c027002011170027402010f74027802010d78028002010c80028802011b88028b02011b8b028e02011b8e029102011b91029902011da802b0020116b002b8020112c002c8020111c802d002010cd002d8020111d802e0020116e002e802010fe802f0020116f002f8020112f802fb02011bfb02fe02011bfe020103011b01030803011808030b0301180b030e0301180e031103011811031903011819032003011820032803011828033003011830034003011840034803011848034b0301184b034e0301184e035103011851035903011859036003011860036803011868037003011870038003011880039803011d9803a0030116a003b803011eb803c0030118c003c8030119c803d0030122d003d803011bd803e003011ee003e8030120e803f003011bf003f8030120f80300040114`), music.PlaybackMode.LoopingInBackground)
+    music.setVolume(5)
+    tiles.setCurrentTilemap(tilemap`level19`)
+    music.play(music.createSong(assets.song`SUGAR PLUM`), music.PlaybackMode.LoopingInBackground)
 }
 function TransitionFadeToWhite (Time: number) {
     color.startFade(color.originalPalette, color.White, Time / 2)
@@ -1343,6 +2122,75 @@ function DADTHIRDINTERACTION () {
     pause(5000)
     sprites.destroy(Dad)
     Keys = 3
+}
+function INCORRECT_ANIMATION () {
+    music.stopAllSounds()
+    scene.setBackgroundColor(15)
+    tiles.setCurrentTilemap(tilemap`level35`)
+    sprites.destroy(John)
+    color.startFade(color.Black, color.originalPalette, 500)
+    color.pauseUntilFadeDone()
+    music.play(music.createSong(hex`0090010408030100001c00010a006400f401640000040000000000000000000000000005000004900000000400012c04000800012a08000c0001290c001000012710001400012514001800012418001c0001221c002000012020002400011e24002800011d28002c00011b2c003000011930003400011834003800011638003c0001143c004000011240004400011144004800010f48004c00010d4c005000010c50005400010a54005800010858005c0001065c0060000105`), music.PlaybackMode.InBackground)
+    mySprite = sprites.create(img`
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f e e e e e e e e f f . . 
+        . . f e e 2 2 2 2 2 2 e e f . . 
+        . . f e 2 d d d d d d 2 e f . . 
+        . . f d d d e e e e d d d f . . 
+        . f f e f b f 4 4 f b f e f f . 
+        . f e e 4 1 f d d f 1 4 e e f . 
+        f f e e e d d d d d d e e e f f 
+        f e e f e e 4 e e 4 e e f e e f 
+        f e f f f 2 2 2 2 2 2 f f f e f 
+        f f 4 d f 2 2 2 2 2 2 f d 4 f f 
+        . f 4 4 f d d 5 5 d d f 4 4 f . 
+        . . . . . f f f f f f . . . . . 
+        . . . . . f f . . f f . . . . . 
+        `, SpriteKind.Player)
+    mySprite.setPosition(scene.screenWidth(), scene.screenHeight() / 0)
+    mySprite.setVelocity(-100, 0)
+    pause(500)
+    DRAGON = sprites.create(img`
+        ................................
+        .............cc22...............
+        .............c2c2...............
+        ...........cc2ccc...............
+        ......cccccc22c...cc22..........
+        ......ccccc22cc...cc22..........
+        ...ccc66666666ccccc2cc..........
+        ..c66666666666666b2cc...........
+        ..c666666ff666666bccc...........
+        .c666666f666666666b...c22.......
+        c666666f226bb666666bbc2cc.......
+        c66bb6f22666666666666bc.........
+        c66bb6626666666666666bc.........
+        c666666666666666666666b.........
+        .c1bbb1bbb666667776666b..c2.....
+        .c1bbb1bbb666667776666b..cc.....
+        c16331bbbbb667777776667ccc......
+        .c6333bbbbb667777777777bbcc.....
+        .c6333bbbbb667777777777bbcc.....
+        .c63333bbb666777777777777ccccc..
+        .c63333bb66bbb666b7777777cccc7c.
+        .c63333666bbb6666b77777777b777c.
+        .c63333666bbb6666b77777777b777c.
+        ..c666666b66666bb7777777777777c.
+        ...ccccbbc666bb6667bb77777777cc.
+        ...ccccbbc666bb6667bb77777777cc.
+        ......cbbbccc66dddbbbb77777ccc..
+        .....cddddcccdddddbccbbbbcc.....
+        .....cddddcccdddddbccbbbbcc.....
+        .....ccccccdd6666ddcccccc.......
+        ..........ccccccccccc...........
+        ................................
+        `, SpriteKind.Player)
+    DRAGON.setPosition(scene.screenWidth(), scene.screenHeight() / 0)
+    DRAGON.setVelocity(-125, 0)
+    pause(2000)
+    game.showLongText("YOU GOT EATEN BY A DRAGON... BECAUSE THAT MAKES SENSE...", DialogLayout.Bottom)
+    game.gameOver(false)
 }
 info.onScore(50, function () {
     if (SARAHINTERACTIONS == 1) {
@@ -1618,12 +2466,12 @@ function MOMFIRSTINTERACTION () {
     game.showLongText("WATCH OUT FOR ANYTHING THAT AREN'T THOSE THINGS!", DialogLayout.Bottom)
     color.startFade(color.originalPalette, color.White, 500)
     color.pauseUntilFadeDone()
-    sprites.destroy(MOM)
+    sprites.destroy(MOM2)
     sprites.destroy(John)
-    sprites.destroy(HARRY)
+    sprites.destroy(HARRY2)
     sprites.destroy(CHRISTMAS_TREE)
     sprites.destroy(CAGED_HARRY)
-    PLATE = sprites.create(img`
+    PLATE2 = sprites.create(img`
         . . . . . f f f f f f f f f f f f f . . . . . 
         . . f f f 1 1 1 d d d d d d d 1 1 1 f f f . . 
         . f 1 1 1 d 1 1 1 1 1 1 1 1 1 1 1 d 1 1 1 f . 
@@ -1762,9 +2610,9 @@ function MOMFIRSTINTERACTION () {
         1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
         1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
         `)
-    PLATE.setPosition(scene.screenWidth() / 2, 100)
-    controller.moveSprite(PLATE, 100, 0)
-    PLATE.setStayInScreen(true)
+    PLATE2.setPosition(scene.screenWidth() / 2, 100)
+    controller.moveSprite(PLATE2, 100, 0)
+    PLATE2.setStayInScreen(true)
     FOODSPAWN += 1
     music.stopAllSounds()
     music.play(music.createSong(hex`0096000408200100001c00010a006400f40164000004000000000000000000000000000500000460030c001000012010001800012518001c0001241c002000012520003000012230003400012234003c0001273c004000012540004400012244005400012054005800012058006000012560006400012464006800012568007000012270007400011e74007800011e78007c0001227c008000012280008400012084008800012088008c0001208c009000012090009400012094009c00011e9c00a000011ea000a400011da400b400011db400b8000120b800c0000125c000c4000124c400c8000125c800d8000122d800dc000122dc00e4000127e400e8000125e800ec000122ec00fc000120fc000001012000010801012508010c0101240c011001012510011801012218011c01011e1c012001011e20012401012224012801012228012c0101202c013001012030013401012034013801012038013c0101203c014401011e44014801011e48014c01011d4c015c01011d5c016001012960016401012964016801012968017001012970017401012774017801012578018001012580018401012284018801012288018c0101228c019801012298019c0101279c01a0010127a001a4010127a401ac010127ac01b0010125b001b4010122b401bc010122bc01c0010120c001c4010120c401c8010120c801d4010120d401d8010129d801dc010129dc01e0010129e001e8010129e801ec010127ec01f0010125f001f8010125f801fc010122fc010002012200020402012204020802012208020c0201270c021002012510021402012414022002012420022402012524022802012728022c0201272c023002012730023802012738024802012548024c0201294c025002012950025402012954025c0201295c026002012760026402012564026c0201256c027002012270027402012274027802012278028402012284028802012788028c0201278c029002012790029802012798029c0201259c02a0020122a002a8020122a802ac020120ac02b0020120b002b4020120b402c0020120c002c4020129c402c8020129c802cc020129cc02d4020129d402d8020127d802dc020125dc02e4020125e402e8020122e802ec020122ec02f0020122f002f4020122f402f8020127f802fc020125fc020003012400030c0301240c031003012510031403012714031803012718031c0301271c0320030127200322030129220324030127240334030125`), music.PlaybackMode.LoopingInBackground)
@@ -1777,7 +2625,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     otherSprite.destroy()
     music.setVolume(50)
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
-    info.changeScoreBy(50)
+    info.changeScoreBy(1)
 })
 function KATHLEEN_INTERACTION_2 () {
     game.showLongText("THANK YOU SO MUCH JOHN! NOW I CAN GO AND OPEN PRESENTS!", DialogLayout.Bottom)
@@ -1795,11 +2643,11 @@ function KATHLEEN_INTERACTION_1 () {
     game.showLongText("GOOD MORNING JOHN! I NEED YOUR HELP! KIT RAN UNDER THE BED! CAN YOU HELP ME FIND HER?", DialogLayout.Bottom)
     game.showLongText("P.S. WATCH OUT FOR SPIDERS! IT GETS REALLY SPIDERY DOWN THERE!", DialogLayout.Bottom)
     music.stopAllSounds()
-    sprites.destroy(Kathleen)
     color.startFade(color.originalPalette, color.Black, 500)
     color.pauseUntilFadeDone()
-    color.startFade(color.Black, color.originalPalette, 500)
+    sprites.destroy(Kathleen)
     tiles.setCurrentTilemap(tilemap`level4`)
+    color.startFade(color.Black, color.originalPalette, 500)
     color.pauseUntilFadeDone()
     game.showLongText("THIS BED MUST BE HUGE!... and poorly kept sheesh!", DialogLayout.Bottom)
     KIT = sprites.create(img`
@@ -1821,6 +2669,13 @@ function KATHLEEN_INTERACTION_1 () {
     Kitinteractions = 0
     MOVING_IN_SQUARE = 0
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.LILTEDDY, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
+    music.setVolume(50)
+    music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.InBackground)
+    info.changeLifeBy(-2)
+    scene.cameraShake(5, 200)
+})
 sprites.onOverlap(SpriteKind.Mark, SpriteKind.Player, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         DADINTERACTIONS += 1
@@ -1833,9 +2688,17 @@ sprites.onOverlap(SpriteKind.Mark, SpriteKind.Player, function (sprite, otherSpr
         if (DADINTERACTIONS == 3) {
             DADTHIRDINTERACTION()
         }
+        if (DADINTERACTIONS >= 4) {
+            game.showLongText("IT'S A TOASTER!!!", DialogLayout.Bottom)
+        }
     }
 })
 let EGGS: Sprite = null
+let magnitude = 0
+let dy = 0
+let dx = 0
+let projectile2: Sprite = null
+let KathleenInteractions = 0
 let milk: Sprite = null
 let hamburger: Sprite = null
 let LIZARD_2: Sprite = null
@@ -1845,24 +2708,36 @@ let bacon: Sprite = null
 let ham: Sprite = null
 let LADYBUG: Sprite = null
 let fruit: Sprite = null
+let LIL_TEDDYS: Sprite = null
+let DRAGON: Sprite = null
+let mySprite: Sprite = null
 let MOVING_IN_SQUARE = 0
 let Spider1: Sprite = null
 let Spider2: Sprite = null
 let Kitinteractions = 0
-let CHRISTMAS_TREE: Sprite = null
-let PLATE: Sprite = null
-let HARRY: Sprite = null
+let PLATE2: Sprite = null
+let FOOSBALL: Sprite = null
+let POOL_TABLE: Sprite = null
+let PONG_TABLE: Sprite = null
+let BIG_TEDDY: Sprite = null
 let CAGED_HARRY: Sprite = null
-let MOM: Sprite = null
+let HARRY2: Sprite = null
+let CHRISTMAS_TREE: Sprite = null
+let AJ: Sprite = null
+let ENDGAME = 0
+let LILTEDDYSPAWN = 0
+let MOM2: Sprite = null
 let camera: Sprite = null
 let Dad: Sprite = null
 let CORRECTGUESSES = 0
 let KIT: Sprite = null
 let SARAH: Sprite = null
-let DRAGON: Sprite = null
-let mySprite: Sprite = null
+let PRESENTS2: Sprite = null
+let MIRROR: Sprite = null
+let THEPRESENT: Sprite = null
 let Kathleen: Sprite = null
 let textSprite: TextSprite = null
+let AJR_INTERACTIONS = 0
 let FREED_HARRY = 0
 let FOODSPAWN = 0
 let Ladybug_Spawn = 0
@@ -1872,6 +2747,14 @@ let MOMINTERACTIONS = 0
 let DADINTERACTIONS = 0
 let SARAHINTERACTIONS = 0
 let Keys = 0
+music.stopAllSounds()
+let HAMBURGERSPAWN = 0
+let HAMSPAWN = 0
+let FRUITSPAWN = 0
+let MILKSPAWN = 0
+let PANCAKESPAWN = 0
+let BACONSPAWN = 0
+let projectile = null
 TransitionFadeToWhite(1000)
 let TitleScreen = sprites.create(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -2009,13 +2892,14 @@ effects.blizzard.endScreenEffect()
 sprites.destroyAllSpritesOfKind(SpriteKind.Title)
 sprites.destroyAllSpritesOfKind(SpriteKind.Text)
 pause(2000)
-game.splash("HOWDY JOHN, WELCOME TO JOHN'S CHRISTMAS ADVENTURE")
+game.splash("HOWDY JOHN")
+game.splash("WELCOME TO JOHN'S", "CHRISTMAS ADVENTURE")
 game.splash("YOUR OBJECTIVE IS SIMPLE")
-game.splash("HELP WAKE EVERYONE UP SO WE CAN OPEN PRESENTS!!!")
-game.splash("GOOD LUCK!!!")
+game.splash("HELP WAKE EVERYONE UP", "SO WE CAN OPEN PRESENTS")
+game.splash("USE \"A\" TO INTERACT AND", "\"B\" TO USE DOORS/STAIRS")
+game.splash("HAVE FUN AND", "GOOD LUCK!")
 TransitionFadeToWhite(1000)
 Keys = 0
-let KathleenInteractions = 0
 SARAHINTERACTIONS = 0
 DADINTERACTIONS = 0
 MOMINTERACTIONS = 0
@@ -2042,14 +2926,9 @@ scene.cameraFollowSprite(John)
 John_and_Kathleens_Room()
 Lizard_Spawn = 0
 Ladybug_Spawn = 0
-let BACONSPAWN = 0
 FOODSPAWN = 0
-let PANCAKESPAWN = 0
-let MILKSPAWN = 0
-let FRUITSPAWN = 0
-let HAMSPAWN = 0
-let HAMBURGERSPAWN = 0
 FREED_HARRY = 0
+AJR_INTERACTIONS = 0
 game.onUpdate(function () {
     if (MOVING_IN_SQUARE == 1) {
         Kit_corner_movement()
@@ -2057,6 +2936,37 @@ game.onUpdate(function () {
 })
 game.onUpdate(function () {
 	
+})
+game.onUpdateInterval(5000, function () {
+    if (LILTEDDYSPAWN == 1) {
+        LIL_TEDDYS = sprites.create(img`
+            ....ff.........ff....
+            ...fee.........eef...
+            ...fedffeeeeeffdef...
+            ....feeeeeeeeeeef....
+            ....feeefeeefeeef....
+            .....feeefefeeef.....
+            .....fee2eee2eef.....
+            .....feeefffeeef.....
+            .....feeeefeeeef.....
+            .....feefeeefeef.....
+            .....ffeeeeeeeff.....
+            ....feefffffffeef....
+            ...eeeeefff2eeeeee...
+            ...eeeeef222eeeeee...
+            ...eeeeefff2eeeeee...
+            ...feeeffeeeffeeef...
+            ....fffeeeeeeefff....
+            ....fefffeeefffeff...
+            ...feeeeeeeeeeeeee...
+            ..feeeeeeeeeeeeeeeff.
+            feeeee.........eeeeee
+            feeeef.........feeeee
+            `, SpriteKind.LILTEDDY)
+        tiles.placeOnTile(LIL_TEDDYS, tiles.getTileLocation(10, 10))
+        LIL_TEDDYS.follow(John, randint(80, 90))
+        LIL_TEDDYS.lifespan = 4000
+    }
 })
 game.onUpdateInterval(randint(2500, 3000), function () {
     if (FOODSPAWN == 1) {
@@ -2211,6 +3121,37 @@ game.onUpdateInterval(randint(2000, 4000), function () {
         milk.setFlag(SpriteFlag.AutoDestroy, true)
     }
 })
+game.onUpdateInterval(4000, function () {
+    if (LILTEDDYSPAWN == 1) {
+        LIL_TEDDYS = sprites.create(img`
+            ....ff.........ff....
+            ...fee.........eef...
+            ...fedffeeeeeffdef...
+            ....feeeeeeeeeeef....
+            ....feeefeeefeeef....
+            .....feeefefeeef.....
+            .....fee2eee2eef.....
+            .....feeefffeeef.....
+            .....feeeefeeeef.....
+            .....feefeeefeef.....
+            .....ffeeeeeeeff.....
+            ....feefffffffeef....
+            ...eeeeefff2eeeeee...
+            ...eeeeef222eeeeee...
+            ...eeeeefff2eeeeee...
+            ...feeeffeeeffeeef...
+            ....fffeeeeeeefff....
+            ....fefffeeefffeff...
+            ...feeeeeeeeeeeeee...
+            ..feeeeeeeeeeeeeeeff.
+            feeeee.........eeeeee
+            feeeef.........feeeee
+            `, SpriteKind.LILTEDDY)
+        tiles.placeOnTile(LIL_TEDDYS, tiles.getTileLocation(10, 10))
+        LIL_TEDDYS.follow(John, randint(50, 60))
+        LIL_TEDDYS.lifespan = 2000
+    }
+})
 forever(function () {
     if (John.overlapsWith(Kathleen) && controller.A.isPressed()) {
         KathleenInteractions += 1
@@ -2219,6 +3160,9 @@ forever(function () {
         }
         if (KathleenInteractions == 2) {
             KATHLEEN_INTERACTION_2()
+        }
+        if (KathleenInteractions >= 3) {
+            game.showLongText("I HELPED AJ WITH THIS GIFT!!!", DialogLayout.Bottom)
         }
     }
     if (John.tileKindAt(TileDirection.Center, assets.tile`myTile8`) && (controller.B.isPressed() && Keys == 0)) {
@@ -2243,7 +3187,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         HALLWAY()
         tiles.placeOnTile(John, tiles.getTileLocation(17, 0))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(17, 0))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(17, 0))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2253,7 +3197,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         HALLWAY()
         tiles.placeOnTile(John, tiles.getTileLocation(2, 0))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(2, 0))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(2, 0))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2263,7 +3207,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         JKROOM()
         tiles.placeOnTile(John, tiles.getTileLocation(18, 7))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(18, 7))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(18, 7))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2273,7 +3217,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         JKROOM()
         tiles.placeOnTile(John, tiles.getTileLocation(5, 7))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(5, 7))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(5, 7))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2374,7 +3318,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         SARAHS_ROOM()
         tiles.placeOnTile(John, tiles.getTileLocation(6, 4))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(6, 4))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(6, 4))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2387,7 +3331,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         HALLWAY()
         tiles.placeOnTile(John, tiles.getTileLocation(2, 7))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(2, 7))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(2, 7))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2397,7 +3341,7 @@ forever(function () {
         color.pauseUntilFadeDone()
         MOMDADSROOM()
         tiles.placeOnTile(John, tiles.getTileLocation(1, 11))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(1, 11))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(1, 11))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2408,7 +3352,7 @@ forever(function () {
         HALLWAY()
         sprites.destroy(Dad)
         tiles.placeOnTile(John, tiles.getTileLocation(23, 3))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(23, 3))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(23, 3))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
     }
@@ -2613,7 +3557,7 @@ forever(function () {
         color.startFade(color.originalPalette, color.White, 500)
         color.pauseUntilFadeDone()
         Downstairs()
-        MOM = sprites.create(img`
+        MOM2 = sprites.create(img`
             . . . . . f f f f . . . . . 
             . . . f f e e e e f f . . . 
             . . f e e e e e e e e f . . 
@@ -2980,26 +3924,32 @@ forever(function () {
         true
         )
         tiles.placeOnTile(John, tiles.getTileLocation(7, 17))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(7, 17))
-        tiles.placeOnTile(MOM, tiles.getTileLocation(10, 10))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(7, 17))
+        tiles.placeOnTile(MOM2, tiles.getTileLocation(10, 10))
         tiles.placeOnTile(CAGED_HARRY, tiles.getTileLocation(12, 6))
         tiles.placeOnTile(CHRISTMAS_TREE, tiles.getTileLocation(14, 2))
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
         CAGED_HARRY.sayText("BARK! BARK!")
     }
-    if (John.tileKindAt(TileDirection.Center, sprites.dungeon.stairSouth) && (controller.B.isPressed() && Keys >= 3)) {
+    if (John.tileKindAt(TileDirection.Center, sprites.dungeon.stairSouth) && (controller.B.isPressed() && Keys == 3)) {
         game.showLongText("YOU TRIED WALKING NORMALLY", DialogLayout.Bottom)
         color.startFade(color.originalPalette, color.White, 500)
         color.pauseUntilFadeDone()
         HALLWAY()
         tiles.placeOnTile(John, tiles.getTileLocation(18, 5))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(18, 5))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(18, 5))
         sprites.destroy(CAGED_HARRY)
-        sprites.destroy(MOM)
+        sprites.destroy(MOM2)
         sprites.destroy(CHRISTMAS_TREE)
         color.startFade(color.White, color.originalPalette, 500)
         color.pauseUntilFadeDone()
+    }
+    if (John.tileKindAt(TileDirection.Center, sprites.dungeon.stairSouth) && (controller.B.isPressed() && ENDGAME >= 1)) {
+        game.showLongText("YOU SHOULD GO OPEN PRESENTS", DialogLayout.Bottom)
+    }
+    if (John.tileKindAt(TileDirection.Center, sprites.dungeon.doorOpenWest) && (controller.B.isPressed() && ENDGAME >= 1)) {
+        game.showLongText("YOU SHOULD GO OPEN PRESENTS", DialogLayout.Bottom)
     }
     if (John.tileKindAt(TileDirection.Center, sprites.dungeon.stairWest) && (controller.B.isPressed() && Keys > 3)) {
         game.showLongText("YOU TRIED WALKING NORMALLY", DialogLayout.Bottom)
@@ -3355,7 +4305,7 @@ forever(function () {
         true
         )
         tiles.placeOnTile(John, tiles.getTileLocation(7, 17))
-        tiles.placeOnTile(HARRY, tiles.getTileLocation(7, 17))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(7, 17))
         tiles.placeOnTile(CAGED_HARRY, tiles.getTileLocation(12, 6))
         tiles.placeOnTile(CHRISTMAS_TREE, tiles.getTileLocation(14, 2))
         color.startFade(color.White, color.originalPalette, 500)
@@ -3366,6 +4316,419 @@ forever(function () {
         game.showLongText("YOU QUIETLY OPENED THE DOOR", DialogLayout.Bottom)
         color.startFade(color.originalPalette, color.White, 500)
         color.pauseUntilFadeDone()
+        BASEMENT()
+        sprites.destroy(CAGED_HARRY)
+        sprites.destroy(CHRISTMAS_TREE)
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(7, 8))
+        tiles.placeOnTile(John, tiles.getTileLocation(7, 8))
+        color.startFade(color.White, color.originalPalette, 500)
+        color.pauseUntilFadeDone()
+    }
+    if (John.tileKindAt(TileDirection.Center, sprites.dungeon.doorClosedNorth) && (controller.B.isPressed() && Keys > 3)) {
+        game.showLongText("YOU QUIETLY OPENED THE DOOR", DialogLayout.Bottom)
+        color.startFade(color.originalPalette, color.White, 500)
+        color.pauseUntilFadeDone()
+        sprites.destroy(FOOSBALL)
+        sprites.destroy(PONG_TABLE)
+        sprites.destroy(POOL_TABLE)
+        AJS_ROOM()
+        tiles.placeOnTile(John, tiles.getTileLocation(1, 6))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(1, 6))
+        color.startFade(color.White, color.originalPalette, 500)
+        color.pauseUntilFadeDone()
+    }
+    if (John.tileKindAt(TileDirection.Center, sprites.dungeon.doorOpenNorth) && (controller.B.isPressed() && Keys > 3)) {
+        game.showLongText("YOU TRIED WALKING NORMALLY", DialogLayout.Bottom)
+        color.startFade(color.originalPalette, color.White, 500)
+        color.pauseUntilFadeDone()
+        Downstairs()
+        if (FREED_HARRY == 0) {
+            CAGED_HARRY = sprites.create(img`
+                dddddddddddddddddddd
+                ffffffffffffffffffff
+                fbbbbbbbbbbbbbbbbbbf
+                fbdddbeeedbddeebddbf
+                fbdddbeeefbdfeebedbf
+                fbddebeeeebfeeebeebf
+                fbddebeff1b1effbeebf
+                fbddfbff11bfeefbefbf
+                fbdddbf111bfeeebfdbf
+                fbdddbf1f1b1efebddbf
+                fbffdbf111be1eebddbf
+                fbf1fbf611bf11ebddbf
+                fbf11bee66b666fbddbf
+                fbdf1be111b11efbddbf
+                fbddfb11e1be11fbddbf
+                fbdddb1ff1bff1fbddbf
+                fbdddbfddfbddffbddbf
+                fbbbbbbbbbbbbbbbbbbf
+                ffffffffffffffffffff
+                fddddddddddddddddddf
+                `, SpriteKind.CAGEDHARRY)
+        }
+        CHRISTMAS_TREE = sprites.create(img`
+            ........................
+            ...........66...........
+            ..........6776..........
+            ..........6776..........
+            .........877778.........
+            ........86777768........
+            .......6777777776.......
+            ......677677776776......
+            ......866777777668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....86868868868668.....
+            ....866888668888868.....
+            ....8688886888888888....
+            ....8886688888866888....
+            ....8676888868886768....
+            ...87778868678688776....
+            ..8777767767787767778...
+            .877767777777677776778..
+            .8866777777777777776778.
+            .8667776776767776777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888688888
+            8668868866888866888868..
+            88886686688888868688668.
+            .8688888888888888668868.
+            .8878888868868878868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `, SpriteKind.CHRISTMASTREE)
+        animation.runImageAnimation(
+        CHRISTMAS_TREE,
+        [img`
+            ........................
+            ........................
+            ........................
+            ........................
+            ........................
+            ...........55...........
+            ...........55...........
+            ..........6776..........
+            ..........6776..........
+            .........877778.........
+            ........86777768........
+            .......6727777276.......
+            ......677627726776......
+            ......866777777668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....86868868868668.....
+            ....866188668888868.....
+            ....8688886881881888....
+            ....8886688888866888....
+            ....8676881868886768....
+            ...87778868678688776....
+            ..8777767767787767778...
+            .877267777777677776278..
+            .8866772777277727776778.
+            .8667776776767776777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888688888
+            8668868866888866888168..
+            88886686618888868688668.
+            .8681888888888188668868.
+            .8878888868868878868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `,img`
+            ........................
+            ........................
+            ........................
+            ........................
+            ..........5..5..........
+            ...........55...........
+            ...........55...........
+            ..........5775..........
+            ..........6776..........
+            .........877778.........
+            ........86777768........
+            .......6727777276.......
+            ......677627726776......
+            ......866777777668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....85858868868668.....
+            ....866188668585858.....
+            ....8658586851581888....
+            ....8886658585856588....
+            ....8676881868886768....
+            ...87778858578688776....
+            ..8777767767787767778...
+            .877267777777677776278..
+            .8866772777277727776778.
+            .8667776776767776777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888658888
+            8668868865888866885158..
+            88885686515888568685668.
+            .8651588858885158668868.
+            .8875888868868578868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `,img`
+            ........................
+            ........................
+            ........................
+            .........5....5.........
+            ..........5555..........
+            ..........5555..........
+            ..........5555..........
+            ..........5555..........
+            .........567765.........
+            .........877778.........
+            ........86777768........
+            .......6727227276.......
+            ......677627726776......
+            ......866272272668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....86868868868668.....
+            ....866188668888868.....
+            ....8688886881881888....
+            ....8886688888866888....
+            ....8676881868886768....
+            ...87778868678688776....
+            ..8727767767787767728...
+            .872227277727672772228..
+            .8862722272227222772778.
+            .8667772776267726777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888688888
+            8668868866888866888168..
+            88886686618888868688668.
+            .8681888888888188668868.
+            .8878888868868878868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `,img`
+            ........................
+            .......5...55...5.......
+            ........5......5........
+            .........5.55.5.........
+            ..........5555..........
+            .....5.5.555555.5.5.....
+            .....5.5.555555.5.5.....
+            ..........5555..........
+            .........567765.........
+            ........58777785........
+            .......5867777685.......
+            .......6727227276.......
+            ......677627726776......
+            ......866272272668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....85858868868668.....
+            ....866188668585858.....
+            ....8658586851581888....
+            ....8886658585856588....
+            ....8676881868886768....
+            ...87778858578688776....
+            ..8272767767787767728...
+            .877262727727672772228..
+            .8826272772227222772778.
+            .8667726276267726777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888658888
+            8668868865888866885158..
+            88885686515888568685668.
+            .8651588858885158668868.
+            .8875888868868578868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `,img`
+            ........................
+            ........................
+            ........................
+            .........5....5.........
+            ..........5555..........
+            ..........5555..........
+            ..........5555..........
+            ..........5555..........
+            .........567765.........
+            .........877778.........
+            ........86777768........
+            .......6727227276.......
+            ......677627726776......
+            ......866272272668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....85858868868668.....
+            ....866188668585858.....
+            ....8658586851581888....
+            ....8886658585856588....
+            ....8676881868886768....
+            ...87778858578688776....
+            ..8272767767787767728...
+            .877262727727672772228..
+            .8826272772227222772778.
+            .8667726276267726777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888658888
+            8668868865888866885158..
+            88885686515888568685668.
+            .8651588858885158668868.
+            .8875888868868578868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `,img`
+            ........................
+            ........................
+            ........................
+            ........................
+            ..........5..5..........
+            ...........55...........
+            ...........55...........
+            ..........5775..........
+            ..........6776..........
+            .........877778.........
+            ........86777768........
+            .......6727777276.......
+            ......677627726776......
+            ......866777777668......
+            .....86677677677668.....
+            ....8668866766888668....
+            ....8888668886686888....
+            .....85858868868668.....
+            ....866188668585858.....
+            ....8658586851581888....
+            ....8886658585856588....
+            ....8676881868886768....
+            ...87778858578688776....
+            ..8777767767787767778...
+            .877267777777677776278..
+            .8866772777277727776778.
+            .8667776776767776777688.
+            ..887766768668776667668.
+            ..8688668886688686688668
+            .86688688686866888658888
+            8668868865888866885158..
+            88885686515888568685668.
+            .8651588858885158668868.
+            .8875888868868578868788.
+            .87768776788778777667788
+            877677767787776767776778
+            88877787766777777877788.
+            ..88886786777667768888..
+            .....86887786668868.....
+            ......8886888668888.....
+            .........88ee88.........
+            .........feeeef.........
+            .........feeeef.........
+            ........feeefeef........
+            ........fefeffef........
+            `],
+        200,
+        true
+        )
+        tiles.placeOnTile(John, tiles.getTileLocation(10, 15))
+        tiles.placeOnTile(HARRY2, tiles.getTileLocation(10, 15))
+        tiles.placeOnTile(CAGED_HARRY, tiles.getTileLocation(12, 6))
+        tiles.placeOnTile(CHRISTMAS_TREE, tiles.getTileLocation(14, 2))
+        sprites.destroy(POOL_TABLE)
+        sprites.destroy(PONG_TABLE)
+        sprites.destroy(FOOSBALL)
+        color.startFade(color.White, color.originalPalette, 500)
+        color.pauseUntilFadeDone()
+        CAGED_HARRY.sayText("BARK! BARK!")
+    }
+})
+game.onUpdateInterval(500, function () {
+    if (LILTEDDYSPAWN == 1) {
+        projectile2 = sprites.createProjectileFromSprite(img`
+            . 3 . . . . . . . . . . . 4 . . 
+            . 3 3 . . . . . . . . . 4 4 . . 
+            . 3 d 3 . . 4 4 . . 4 4 d 4 . . 
+            . . 3 5 3 4 5 5 4 4 d d 4 4 . . 
+            . . 3 d 5 d 1 1 d 5 5 d 4 4 . . 
+            . . 4 5 5 1 1 1 1 5 1 1 5 4 . . 
+            . 4 5 5 5 5 1 1 5 1 1 1 d 4 4 . 
+            . 4 d 5 1 1 5 5 5 1 1 1 5 5 4 . 
+            . 4 4 5 1 1 5 5 5 5 5 d 5 5 4 . 
+            . . 4 3 d 5 5 5 d 5 5 d d d 4 . 
+            . 4 5 5 d 5 5 5 d d d 5 5 4 . . 
+            . 4 5 5 d 3 5 d d 3 d 5 5 4 . . 
+            . 4 4 d d 4 d d d 4 3 d d 4 . . 
+            . . 4 5 4 4 4 4 4 4 4 4 4 . . . 
+            . 4 5 4 . . 4 4 4 . . . 4 4 . . 
+            . 4 4 . . . . . . . . . . 4 4 . 
+            `, BIG_TEDDY, 0, 0)
+        // Calculate direction to the player sprite
+        dx = John.x - BIG_TEDDY.x
+        dy = John.y - BIG_TEDDY.y
+        magnitude = Math.sqrt(dx * dx + dy * dy)
+        // Set projectile velocity towards the player
+        projectile2.vx = dx / magnitude * 50
+        projectile2.vy = dy / magnitude * 50
     }
 })
 game.onUpdateInterval(randint(2000, 3000), function () {
